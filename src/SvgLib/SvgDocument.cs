@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Xml;
 
 namespace SvgLib
@@ -12,7 +12,11 @@ namespace SvgLib
         {
             _document = document;
         }
-
+        public static SvgDocument Open(XmlDocument document)
+        {
+            var root = document.DocumentElement;
+            return new SvgDocument(document, root);
+        }
         public static SvgDocument Create()
         {
             var document = new XmlDocument();
@@ -26,8 +30,19 @@ namespace SvgLib
 
         public SvgViewBox ViewBox
         {
-            get => Element.GetAttribute("viewBox", new SvgViewBox());
+            get => new SvgViewBox(Element.GetAttribute("viewBox"));
             set => Element.SetAttribute("viewBox", value.ToString());
+        }
+
+        public SvgDistance Width
+        {
+            get => Element.GetAttribute("width", new SvgDistance());
+            set => Element.SetAttribute("width", value.ToString());
+        }
+        public SvgDistance Height
+        {
+            get => Element.GetAttribute("height", new SvgDistance());
+            set => Element.SetAttribute("height", value.ToString());
         }
     }
 }
